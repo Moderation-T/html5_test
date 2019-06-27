@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      body {
+        background: rgb(157, 155, 155);
+      }
+      #canvas {
+        background: #fff;
+        border: 1px solid #ccc;
+        margin: 100px 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600px" height="400px"></canvas>
+  </body>
+  <script>
+    window.onload = function() {
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+
+      const toArc = angle => {
+        return angle * (Math.PI / 180);
+      };
+
+      const score = {
+        A: 5,
+        B: 35,
+        C: 11,
+        D: 22,
+      };
+
+      const color = ['red', 'blue', 'green', 'yellow'];
+
+      // 画饼封装
+      const renderPie = (pieX, pieY, pieR, startAng, endAng, fillStyle, text) => {
+        // pieX, pieY 原点坐标
+        // pieR, 半径
+        // startAng, endAng, 起始角度 结束角度
+        // fillStyle 填充颜色
+        // text 提示的文字
+
+        //饼图操作
+        const a = Math.sin(toArc(startAng)) * pieR;
+        const b = Math.cos(toArc(startAng)) * pieR;
+        const x1 = pieX + b;
+        const y1 = pieY + a;
+
+        context.save();
+        context.beginPath();
+        context.moveTo(pieX, pieY);
+        context.lineTo(x1, y1);
+        context.arc(pieX, pieY, pieR, toArc(startAng), toArc(endAng), false);
+        context.closePath();
+        context.fillStyle = fillStyle;
+        context.stroke();
+        context.fill();
+        context.restore();
+
+        // 文字操作
+        const ta = Math.sin(toArc(startAng + (endAng - startAng) / 2)) * pieR;
+        const tb = Math.cos(toArc(startAng + (endAng - startAng) / 2)) * pieR;
+        const dis = 10;
+        let tx1 = tb >= 0 ? pieX + tb + dis : pieX + tb - dis;
+        let ty1 = ta >= 0 ? pieY + ta + dis : pieY + ta - dis;
+
+        context.save();
+        context.beginPath();
+        context.strokeText(text, tx1, ty1);
+        context.restore();
+      };
+
+      let allScore = 0;
+      let percentAngle = [];
+
+      for (const key in score) {
+        if ({}.hasOwnProperty.call(score, key)) {
+          allScore += score[key];
+        }
+      }
+
+      for (const key in score) {
+        if ({}.hasOwnProperty.call(score, key)) {
+          percentAngle.push({ [key]: 360 * (score[key] / allScore) });
+        }
+      }
+
+      startAng = 0;
+      console.log(percentAngle);
+
+      percentAngle.map((angle, index) => {
+        const endAng = startAng + angle[Object.keys(angle)[0]];
+
+        renderPie(200, 200, 150, startAng, endAng, color[index], Object.keys(angle)[0]);
+        startAng = endAng;
+      });
+    };
+  </script>
+</html>

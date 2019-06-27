@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      body {
+        background: rgb(157, 155, 155);
+      }
+      #canvas {
+        background: #fff;
+        border: 1px solid #ccc;
+        margin: 100px 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600px" height="400px"></canvas>
+  </body>
+  <script>
+    window.onload = function() {
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+
+      context.fillStyle = 'red';
+      rectX = 100;
+      rectY = 100;
+      rectW = 100;
+      rectH = 100;
+
+      context.fillRect(rectX, rectY, rectW, rectH);
+
+      canvas.addEventListener('mousemove', e => {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        /* 获取鼠标位置的方法 1
+            const mouseX = e.ClinetX.canvas.offsetLeft
+            const mouseY = e.ClinetY.canvas.offsetTop
+          */
+        const mouseX = e.offsetX;
+        const mouseY = e.offsetY;
+
+        if (mouseX > rectX && mouseX < rectX + rectW && mouseY > rectY && mouseY < rectY + rectH) {
+          context.fillStyle = 'green';
+        } else {
+          context.fillStyle = 'red';
+        }
+
+        context.fillRect(rectX, rectY, rectW, rectH);
+      });
+    };
+  </script>
+</html>

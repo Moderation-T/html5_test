@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      body {
+        background: rgb(157, 155, 155);
+      }
+      #canvas {
+        background: #fff;
+        border: 1px solid #ccc;
+        margin: 100px 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600px" height="400px"></canvas>
+  </body>
+  <script>
+    window.onload = function() {
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+
+      let n = 1;
+      const rectRotate = () => {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        context.beginPath();
+        context.save();
+        context.strokeStyle = 'green';
+        context.translate(150, 150);
+        context.rotate(n * 15 * (Math.PI / 180));
+        context.strokeRect(-50, -50, 100, 100);
+        context.restore();
+
+        context.beginPath();
+        context.save();
+        context.strokeStyle = 'blue';
+        context.translate(150, 150);
+        context.rotate(-(n - 1) * 10 * (Math.PI / 180));
+        context.strokeRect(-50, -50, 100, 100);
+        context.restore();
+        n++;
+        requestAnimationFrame(rectRotate);
+      };
+
+      requestAnimationFrame(rectRotate);
+
+      // setInterval(rectRotate, 50);
+    };
+  </script>
+</html>

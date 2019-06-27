@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      body {
+        background: rgb(157, 155, 155);
+      }
+      #canvas {
+        background: #fff;
+        border: 1px solid #ccc;
+        margin: 100px 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600px" height="400px"></canvas>
+  </body>
+  <script>
+    window.onload = function() {
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+
+      // 画路径
+      context.beginPath();
+      context.moveTo(100, 100);
+      context.lineTo(200, 100);
+      context.lineTo(200, 200);
+      context.lineTo(100, 200);
+      context.closePath();
+
+      /*设置样式*/
+      // 边颜色
+      context.strokeStyle = '#09f';
+      // 填充色
+      context.fillStyle = 'pink';
+      // 线宽
+      context.lineWidth = 5;
+
+      // 描边
+      context.stroke();
+      // 填充
+      context.fill();
+
+      // ***************************************
+
+      // 画路径
+      context.beginPath();
+      context.moveTo(300, 100);
+      context.lineTo(400, 100);
+      context.lineTo(400, 200);
+      context.lineTo(300, 200);
+      context.closePath();
+
+      /*设置样式*/
+      // 边颜色
+      context.strokeStyle = 'pink';
+      // 填充色
+      context.fillStyle = '#09f';
+      // 线宽
+      context.lineWidth = 5;
+
+      // 描边
+      context.stroke();
+      // 填充
+      context.fill();
+    };
+  </script>
+</html>

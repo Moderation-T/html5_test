@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      body {
+        background: rgb(157, 155, 155);
+      }
+      #canvas {
+        background: #fff;
+        border: 1px solid #ccc;
+        margin: 100px 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600px" height="400px"></canvas>
+  </body>
+  <script>
+    window.onload = function() {
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+
+      // 圆形
+      context.beginPath();
+      const x = 100;
+      const y = 100;
+      const r = 50;
+      context.arc(x, y, r, 0, 2 * Math.PI, false);
+      context.strokeStyle = 'green';
+      context.lineWidth = 5;
+      context.stroke();
+
+      canvas.addEventListener('mousemove', e => {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        const mouseX = e.offsetX;
+        const mouseY = e.offsetY;
+
+        const a = mouseX - x;
+        const b = mouseY - y;
+
+        const c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+
+        if (c < r) {
+          context.strokeStyle = 'red';
+        } else {
+          context.strokeStyle = 'green';
+        }
+
+        context.arc(x, y, r, 0, 2 * Math.PI, false);
+        context.stroke();
+      });
+    };
+  </script>
+</html>
