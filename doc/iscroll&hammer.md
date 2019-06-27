@@ -1,6 +1,5 @@
 # iscroll&hammer
 
-@(智能社)
 
 ### iScroll 主要是滚动
 > bounce  是否允许拖过了
