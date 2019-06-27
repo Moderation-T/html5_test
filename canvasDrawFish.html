@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>canvas简单布局</title>
+    <style>
+      body {
+        background: rgb(157, 155, 155);
+      }
+      #canvas {
+        background: #fff;
+        border: 1px solid #ccc;
+        margin: 100px 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600px" height="400px"></canvas>
+  </body>
+  <script>
+    window.onload = function() {
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+
+      const fish = new Image();
+      fish.src = './source/fish.png';
+      fish.onload = () => {
+        let n = 0; // 图片切换
+        let dir = 0; // 鱼游动距离
+        let frameCount = 0; // 帧数
+        let stop = false; // 控制鱼是否游动
+
+        document.addEventListener('click', () => {
+          stop = !stop;
+          if (!stop) {
+            requestAnimationFrame(SwimFish);
+          }
+        });
+
+        const SwimFish = () => {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.drawImage(fish, 0, n * 37, 55, 38, 100 + dir * 10, 100, 55, 38);
+          frameCount++;
+          if (frameCount % 10 === 0) {
+            dir++;
+            if (n === 3) {
+              n = 0;
+            } else {
+              n++;
+            }
+          }
+          if (!stop) {
+            requestAnimationFrame(SwimFish);
+          }
+        };
+
+        requestAnimationFrame(SwimFish);
+      };
+    };
+  </script>
+</html>
