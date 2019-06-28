@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+    body {background:black; text-align:center;}
+    #c1 {background:white;}
+    </style>
+    <script>
+    window.onload=function (){
+      let oC=document.getElementById('c1');
+      let gd=oC.getContext('2d');
+      let W=oC.width,H=oC.height;
+
+      let oImg=new Image();
+      oImg.src='http://localhost:8080/2.jpg';
+
+      oImg.onload=function (){
+        gd.drawImage(oImg, 0, 0);
+
+        let imageData=gd.getImageData(0, 0, W, H);
+        let data=imageData.data;
+
+        //黄=>扔掉蓝色
+        for(let r=0;r<H;r++){
+          for(let c=0;c<W;c++){
+            //(r*W+c)*4+0       =>    r
+            //(r*W+c)*4+1       =>    g
+            //(r*W+c)*4+2       =>    b
+            //(r*W+c)*4+3       =>    a
+            data[(r*W+c)*4+0]=data[(r*W+c)*4+1]=data[(r*W+c)*4+2]=
+            1.0*(data[(r*W+c)*4+0]+data[(r*W+c)*4+1]+data[(r*W+c)*4+2])/3;
+          }
+        }
+
+        //
+        gd.putImageData(imageData, 0, 0);
+      };
+
+      //
+      let oBtn=document.getElementById('btn1');
+
+      oBtn.onclick=function (){
+        let str=oC.toDataURL();
+
+        document.getElementsByName('col')[0].value=str;
+
+        document.getElementById('form1').submit();
+      };
+    };
+    </script>
+  </head>
+  <body>
+    <form id="form1" action="http://localhost:8080/upload_base64" method="post" style="display:none;">
+      <textarea name="col" rows="8" cols="80"></textarea>
+    </form>
+    <input type="button" value="下载图片" id="btn1"><br>
+    <canvas id="c1" width="750" height="498"></canvas>
+  </body>
+</html>

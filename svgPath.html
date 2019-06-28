@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>svg 动态生成元素</title>
+  </head>
+  <body>
+    <!-- <svg width="800" height="600">
+      <path d="M 100 100 L 300 300 200 500 400 100" style="stroke:red; fill:none"></path>
+    </svg> -->
+  </body>
+  <script>
+    window.onload = () => {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', 800);
+      svg.setAttribute('height', 600);
+      document.body.append(svg);
+
+      const toArc = angle => {
+        return angle * (Math.PI / 180);
+      };
+
+      const renderPie = (centerX, centerY, r, startAngle, endAngle, color) => {
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+        const x1 = centerX + Math.cos(toArc(startAngle)) * r;
+        const y1 = centerY - Math.sin(toArc(startAngle)) * r;
+        const x2 = centerX + Math.cos(toArc(endAngle)) * r;
+        const y2 = centerY - Math.sin(toArc(endAngle)) * r;
+
+        const bigArc = endAngle - startAngle > 180 ? 1 : 0;
+        path.setAttribute('fill', color);
+        path.setAttribute('d', `M ${centerX} ${centerY} L ${x1} ${y1} A ${r} ${r} 0 ${bigArc} 0 ${x2} ${y2}`);
+
+        path.onmousemove = () => {
+          path.setAttribute('fill', 'pink');
+        };
+        path.onmouseleave = () => {
+          path.setAttribute('fill', color);
+        };
+        svg.append(path);
+      };
+
+      const percent = [10, 20, 10 ,60];
+      const color = ['blue', 'red', 'green', 'yellow'];
+      let startAngle = 0;
+
+      for (let i = 0; i < percent.length; i++) {
+        const element = percent[i];
+        const endAngle = startAngle + 360 * (element / 100);
+        renderPie(200, 200, 150, startAngle, endAngle, color[i]);
+        startAngle = endAngle;
+      }
+    };
+  </script>
+</html>
