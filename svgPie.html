@@ -13,37 +13,49 @@
   </body>
   <script>
     window.onload = () => {
+      // 设置svg 最开始忘记给宽高了 真的是疯了。。。
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.setAttribute('width', 800);
       svg.setAttribute('height', 600);
       document.body.append(svg);
 
+      // 角度都要转成弧度来使用
       const toArc = angle => {
         return angle * (Math.PI / 180);
       };
 
+      // 计算坐标
+      const getPoint = (centerX, centerY, angle, r) => {
+        return {
+          x: centerX + Math.cos(toArc(angle)) * r,
+          y: centerY - Math.sin(toArc(angle)) * r,
+        };
+      };
+
+      // 渲染饼图
       const renderPie = (centerX, centerY, r, startAngle, endAngle, color) => {
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const curR = r * 1.25;
 
-        const x1 = centerX + Math.cos(toArc(startAngle)) * r;
-        const y1 = centerY - Math.sin(toArc(startAngle)) * r;
-        const x2 = centerX + Math.cos(toArc(endAngle)) * r;
-        const y2 = centerY - Math.sin(toArc(endAngle)) * r;
+        const { x: x1, y: y1 } = getPoint(centerX, centerY, startAngle, r);
+        const { x: x2, y: y2 } = getPoint(centerX, centerY, endAngle, r);
 
         const bigArc = endAngle - startAngle > 180 ? 1 : 0;
         path.setAttribute('fill', color);
         path.setAttribute('d', `M ${centerX} ${centerY} L ${x1} ${y1} A ${r} ${r} 0 ${bigArc} 0 ${x2} ${y2}`);
 
-        path.onmousemove = () => {
-          path.setAttribute('fill', 'pink');
+        path.onmouseenter = () => {
+          const { x: x1, y: y1 } = getPoint(centerX, centerY, startAngle, curR);
+          const { x: x2, y: y2 } = getPoint(centerX, centerY, endAngle, curR);
+          path.setAttribute('d', `M ${centerX} ${centerY} L ${x1} ${y1} A ${curR} ${curR} 0 ${bigArc} 0 ${x2} ${y2}`);
         };
         path.onmouseleave = () => {
-          path.setAttribute('fill', color);
+          path.setAttribute('d', `M ${centerX} ${centerY} L ${x1} ${y1} A ${r} ${r} 0 ${bigArc} 0 ${x2} ${y2}`);
         };
         svg.append(path);
       };
 
-      const percent = [10, 20, 10 ,60];
+      const percent = [10, 20, 10, 60];
       const color = ['blue', 'red', 'green', 'yellow'];
       let startAngle = 0;
 
